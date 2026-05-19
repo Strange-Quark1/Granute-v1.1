@@ -1,0 +1,17 @@
+# Ignore the entire build directory (This is the most important one!)
+build/
+
+# Ignore compiled executables and object files just in case
+*.exe
+*.obj
+*.o
+*.a
+*.lib
+*.dll
+
+# Ignore IDE specific folders (VS Code workspace settings)
+.vscode/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
