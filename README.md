@@ -1,4 +1,4 @@
-# Granute — 2D High-Performance Verlet Physics Engine
+# Granute — 2D Verlet Physics Engine
 
 Granute is a 2D physics simulation engine built in C++ and Raylib, designed to handle thousands of simultaneous particles and distance constraints in real time at 120+ FPS. The project prioritizes cache locality, minimal runtime heap allocations, and efficient spatial partitioning to maintain low memory and CPU overhead.
 
