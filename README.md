@@ -86,6 +86,36 @@ Below is a breakdown of resource usage under a standard 10,000-particle load tes
 
 ---
 
+## v1.1 Update: Interactive Tooling & UI Architecture
+
+The v1.1 release transitions the engine from a hardcoded simulation into a fully interactive physics sandbox. The primary focus is on real-time parameter tuning and robust user manipulation without destabilizing the Verlet integrator.
+
+### Immediate Mode GUI (IMGUI) Integration
+
+Integrated `raygui` to build a persistent, low-overhead tooling panel for real-time engine control.
+
+* **State-Driven Tooling:** Implemented a unified state machine via a GUI toggle group (`SPAWN`, `LINK`, `DRAG`) to compartmentalize input logic and interaction modes.
+* **Input Event Isolation:** World-space spatial queries and mouse events are explicitly masked behind a UI bounds check (`CheckCollisionPointRec`). This isolates the GUI layout from the physics world, preventing accidental particle spawning or scene interference when interacting with menus.
+
+### Kinematic Mouse Manipulation (Drag Mode)
+
+Added a robust dragging mode allowing for the real-time repositioning of active particles within the spatial grid.
+
+* **Verlet Velocity Synchronization:** Because Verlet integration relies on implicit velocity $(x_t - x_{t-\Delta t})$, forcibly moving a particle can cause massive synthetic velocity spikes upon release. To solve this, the drag logic synchronizes the current position (`posX`) directly with the historical position (`old_posX`) during the hold state. This zeroes out the momentum vector, ensuring the particle inherits exact zero velocity when dropped.
+
+### Real-Time Material & Constraint Tuning
+
+Replaced hardcoded initialization values with continuous UI sliders, mapping user input directly to the engine's memory arrays.
+
+* **Dynamic Material Spawning:** Interactive control over newly spawned particle properties, including `Radius`, `Mass`, `Bounce` (restitution), and static/dynamic states.
+* **Adjustable Constraint Rigidity:** Added a `Stiffness` configuration slider to modulate the relaxation multiplier of distance constraints, allowing for the creation of both rigid structural links and elastic spring connections on the fly.
+
+### Contextual Entity Control & Stress Testing
+
+* **In-Place Pinning (Right-Click Context):** Implemented a global right-click listener mapped to spatial queries. This allows users to instantly invert the `isFree` boolean of any targeted particle, turning active dynamics into static structural anchors (visually represented by a red-to-green color shift) without needing to navigate UI modes.
+* **Viewport Utilities:** Integrated rapid testing tools directly into the UI loop, including a full memory pool wipe ("Clear Screen") and an automated load-generation macro ("Drop Cluster x50") to facilitate immediate broad-phase profiling and stress testing.
+
+
 ## Build Instructions
 
 ### Prerequisites
